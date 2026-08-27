@@ -75,7 +75,7 @@ function App() {
       <aside className="explorer"><div className="panel-heading">{page === 'extensions' ? 'EXTENSIONS' : 'EXPLORER'} <span>...</span></div><div className="workspace-name">VSCODE-MAIN</div><div className="tree">{renderEntries()}</div></aside>
       <main className="main-view">{content()}</main>
     </div>
-    <footer><span>main*</span><span>UTF-8</span><span>Fish shell</span><span>Electron connected</span></footer>
+    <footer><span>main *</span><span>UTF-8</span><span>Fish shell</span><span>Electron connected</span></footer>
   </div>
 }
 
