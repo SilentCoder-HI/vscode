@@ -1,0 +1,16 @@
+const { contextBridge, ipcRenderer } = require('electron')
+
+contextBridge.exposeInMainWorld('electronAPI', Object.freeze({
+  platform: process.platform,
+  workspace: {
+    list: (path) => ipcRenderer.invoke('workspace:list', path),
+    read: (path) => ipcRenderer.invoke('workspace:read', path),
+  },
+  terminal: {
+    run: (command) => ipcRenderer.invoke('terminal:run', command),
+  },
+  extensions: {
+    list: () => ipcRenderer.invoke('extensions:list'),
+    install: () => ipcRenderer.invoke('extensions:install'),
+  },
+}))
