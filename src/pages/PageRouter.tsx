@@ -2,8 +2,24 @@ import Editor from '@monaco-editor/react'
 import Extensions from './Extensions'
 import Welcome from './Welcome'
 import { RunPage, SearchPage, TerminalPage } from './UtilityPages'
+import type { ExtensionInfo } from '../types/electron'
 
-export default function PageRouter({ page, setPage, activeFile, code, setCode, extensions, onInstall, onRefreshExtensions, terminal, command, setCommand, onSubmit }) {
+type PageRouterProps = {
+  page: string
+  setPage: React.Dispatch<React.SetStateAction<string>>
+  activeFile?: { name?: string; path?: string } | null
+  code: string
+  setCode: (value: string) => void
+  extensions: ExtensionInfo[]
+  onInstall: () => Promise<void> | void
+  onRefreshExtensions?: () => Promise<void> | void
+  terminal: string
+  command: string
+  setCommand: (value: string) => void
+  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void | Promise<void>
+}
+
+export default function PageRouter({ page, setPage, activeFile, code, setCode, extensions, onInstall, onRefreshExtensions, terminal, command, setCommand, onSubmit }: PageRouterProps) {
   if (page === 'welcome') return <Welcome onOpen={() => setPage('explorer')} onExtensions={() => setPage('extensions')} />
   if (page === 'extensions') return <Extensions extensions={extensions} onInstall={onInstall} onRefreshExtensions={onRefreshExtensions} />
   if (page === 'search') return <SearchPage />

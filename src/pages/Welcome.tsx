@@ -1,4 +1,9 @@
-export default function Welcome({ onOpen, onExtensions }) {
+type WelcomeProps = {
+  onOpen: () => void
+  onExtensions: () => void
+}
+
+export default function Welcome({ onOpen, onExtensions }: WelcomeProps) {
   return <section className="mx-auto max-w-5xl px-8 py-[9vh] sm:px-16">
     <p className="font-mono text-[11px] font-medium tracking-[0.1em] text-[#a6c9a8]">NORTHSTAR WORKBENCH / 01</p>
     <h1 className="mt-8 text-5xl font-semibold leading-[0.95] text-[#f5f1e8] sm:text-7xl lg:text-[6.5rem]">Code without<br /><em className="not-italic text-[#e59b62]">compromise.</em></h1>

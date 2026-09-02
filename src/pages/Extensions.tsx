@@ -1,22 +1,35 @@
 import { useEffect, useState } from 'react'
+import type { ExtensionInfo, MarketplaceExtension } from '../types/electron'
 
-export default function Extensions({ extensions, onInstall, onRefreshExtensions }) {
+type ExtensionsProps = {
+  extensions: ExtensionInfo[]
+  onInstall: () => Promise<void> | void
+  onRefreshExtensions?: () => Promise<void> | void
+}
+
+export default function Extensions({ extensions, onInstall, onRefreshExtensions }: ExtensionsProps) {
   const [query, setQuery] = useState('')
-  const [results, setResults] = useState([])
+  const [results, setResults] = useState<MarketplaceExtension[]>([])
   const [searching, setSearching] = useState(false)
-  const [installingId, setInstallingId] = useState(null)
+  const [installingId, setInstallingId] = useState<string | null>(null)
 
   useEffect(() => {
-    const timer = setTimeout(async () => {
+    const timer = window.setTimeout(async () => {
       const text = query.trim()
       if (!text) {
         setResults([])
         return
       }
 
+      const api = window.electronAPI
+      if (!api) {
+        setResults([])
+        return
+      }
+
       try {
         setSearching(true)
-        const marketResults = await window.electronAPI.extensions.search(text)
+        const marketResults = await api.extensions.search(text)
         setResults(marketResults)
       } catch (error) {
         console.error(error)
@@ -26,15 +39,16 @@ export default function Extensions({ extensions, onInstall, onRefreshExtensions 
       }
     }, 300)
 
-    return () => clearTimeout(timer)
+    return () => window.clearTimeout(timer)
   }, [query])
 
-  async function handleMarketplaceInstall(extension) {
-    if (!window.electronAPI) return
+  async function handleMarketplaceInstall(extension: MarketplaceExtension) {
+    const api = window.electronAPI
+    if (!api) return
 
     try {
       setInstallingId(`${extension.namespace}.${extension.name}`)
-      await window.electronAPI.extensions.installMarketplace(extension)
+      await api.extensions.installMarketplace(extension)
       if (onRefreshExtensions) await onRefreshExtensions()
       setResults((current) => current.filter((item) => `${item.namespace}.${item.name}` !== `${extension.namespace}.${extension.name}`))
     } catch (error) {
