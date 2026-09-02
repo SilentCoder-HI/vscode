@@ -12,5 +12,7 @@ contextBridge.exposeInMainWorld('electronAPI', Object.freeze({
   extensions: {
     list: () => ipcRenderer.invoke('extensions:list'),
     install: () => ipcRenderer.invoke('extensions:install'),
+    search: (query) => ipcRenderer.invoke('extensions:search', query),
+    installMarketplace: (extension) => ipcRenderer.invoke('extensions:installMarketplace', extension),
   },
 }))
