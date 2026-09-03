@@ -140,7 +140,7 @@ Examples include `javascript`, `typescript-language-features`, `python`, `git`, 
 
 The full application also has built-in extension metadata in `vscode-main/product.json`. Its `builtInExtensions` array identifies extensions bundled with the product, including name, version, repository, checksum, and publisher metadata.
 
-Installed user extensions normally belong in a user data extensions directory, separate from the source checkout. The exact directory should be derived from Electron's `app.getPath('userData')`, which is what this app uses for VSIX installs.
+Installed user extensions are stored in the CodeMind home directory, separate from the source checkout: `app.getPath('home')/.codemind/extensions`. The extension registry is stored at `app.getPath('home')/.codemind/extensions.json`.
 
 ### Extension manifest
 
@@ -177,7 +177,7 @@ The current app already does these things:
 2. Lists manifests in Electron's user-data `extensions` directory.
 3. Opens a file picker restricted to `.vsix` files.
 4. Reads `extension/package.json` from the VSIX archive.
-5. Extracts the archive into the app's user extension directory.
+5. Extracts the archive into `/home/system/.codemind/extensions` (the portable form of `app.getPath('home')/.codemind/extensions`).
 6. Shows extension name, publisher, version, and description in the Extensions page.
 
 This is a manifest browser and installer foundation. It is not yet an extension host. A downloaded extension is not automatically executing commands, language servers, themes, or views yet.

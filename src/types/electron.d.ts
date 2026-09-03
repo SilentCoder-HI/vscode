@@ -25,6 +25,8 @@ export type ElectronAPI = {
   workspace: {
     list: (path: string) => Promise<Array<{ name: string; path: string; isDirectory: boolean; parent?: string }>>
     read: (path: string) => Promise<string>
+    openFolder: () => Promise<{ canceled: boolean; name?: string; path?: string; entries?: Array<{ name: string; path: string; isDirectory: boolean }> }>
+    openFile: () => Promise<{ canceled: boolean; name?: string; path?: string; content?: string }>
   }
   terminal: {
     run: (command: string) => Promise<{ output: string; code: number }>

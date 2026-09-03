@@ -61,7 +61,7 @@ export default function Extensions({ extensions, onInstall, onRefreshExtensions 
 
   return <section className="mx-auto max-w-6xl px-8 py-12 sm:px-16">
     <div className="flex flex-col justify-between gap-5 border-b border-[#303c37] pb-6 sm:flex-row sm:items-end">
-      <div><p className="font-mono text-[11px] font-medium tracking-[0.1em] text-[#a6c9a8]">NORTHSTAR MARKETPLACE</p><h2 className="mt-3 text-3xl font-semibold text-[#f5f1e8]">Extensions</h2><p className="mt-2 text-sm text-[#aab8ae]">Language intelligence and interface tools from your vscode-main source tree.</p></div>
+      <div><p className="font-mono text-[11px] font-medium tracking-widest text-[#a6c9a8]">NORTHSTAR MARKETPLACE</p><h2 className="mt-3 text-3xl font-semibold text-[#f5f1e8]">Extensions</h2><p className="mt-2 text-sm text-[#aab8ae]">Language intelligence and interface tools from your vscode-main source tree.</p></div>
       <button className="border border-[#e59b62] px-4 py-2 text-sm text-[#e59b62] transition hover:bg-[#e59b62] hover:text-[#1e1e1e]" onClick={onInstall}>Install from VSIX <span className="ml-2">+</span></button>
     </div>
 
@@ -98,7 +98,7 @@ export default function Extensions({ extensions, onInstall, onRefreshExtensions 
     <div className="mt-8 border-t border-[#303c37] pt-6">
       <h3 className="mb-4 font-mono text-[11px] uppercase tracking-[0.12em] text-[#a6c9a8]">Installed extensions</h3>
       <div className="grid gap-3 md:grid-cols-2">
-        {extensions.slice(0, 30).map((extension) =>
+        {extensions.slice(0, 10).map((extension) =>
           <article className="flex gap-4 border border-[#303c37] bg-[#202a27] p-4" key={extension.id || `${extension.publisher}.${extension.name}`}>
             <div className="grid h-10 w-10 shrink-0 place-items-center bg-[#e59b62] font-mono text-xs font-medium text-[#1e1e1e]">
               {extension.name.slice(0, 2).toUpperCase()}

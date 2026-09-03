@@ -10,6 +10,12 @@ type PageRouterProps = {
   activeFile?: { name?: string; path?: string } | null
   code: string
   setCode: (value: string) => void
+  openTabs: Array<{ name: string; path: string }>
+  onSelectTab: (path: string) => void
+  onCloseTab: (path: string) => void
+  onOpenFile: () => void
+  onOpenFolder: () => void
+  searchQuery: string
   extensions: ExtensionInfo[]
   onInstall: () => Promise<void> | void
   onRefreshExtensions?: () => Promise<void> | void
@@ -19,13 +25,13 @@ type PageRouterProps = {
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => void | Promise<void>
 }
 
-export default function PageRouter({ page, setPage, activeFile, code, setCode, extensions, onInstall, onRefreshExtensions, terminal, command, setCommand, onSubmit }: PageRouterProps) {
-  if (page === 'welcome') return <Welcome onOpen={() => setPage('explorer')} onExtensions={() => setPage('extensions')} />
+export default function PageRouter({ page, setPage, activeFile, code, setCode, openTabs, onSelectTab, onCloseTab, onOpenFile, onOpenFolder, searchQuery, extensions, onInstall, onRefreshExtensions, terminal, command, setCommand, onSubmit }: PageRouterProps) {
+  if (page === 'welcome') return <Welcome onOpenFile={onOpenFile} onOpenFolder={onOpenFolder} onExtensions={() => setPage('extensions')} />
   if (page === 'extensions') return <Extensions extensions={extensions} onInstall={onInstall} onRefreshExtensions={onRefreshExtensions} />
-  if (page === 'search') return <SearchPage />
+  if (page === 'search') return <SearchPage initialQuery={searchQuery} />
   if (page === 'run') return <RunPage />
   if (page === 'terminal') return <TerminalPage terminal={terminal} command={command} setCommand={setCommand} onSubmit={onSubmit} />
-  return <section className="h-full"><div className="h-[38px] border-b border-[#3a4540] bg-[#252b29] px-4 py-3 font-mono text-xs text-[#e6eee7]">{activeFile?.name || 'welcome.js'} <span className="float-right text-[#8f9c93]">x</span></div><Editor height="calc(100vh - 122px)" language={languageFor(activeFile?.name)} theme="vs-dark" value={code} onChange={(value) => setCode(value || '')} options={{ minimap: { enabled: true }, fontSize: 14, padding: { top: 18 } }} /></section>
+  return <section className="h-full"><div className="flex h-[38px] overflow-x-auto border-b border-[#3a4540] bg-[#252b29]">{openTabs.map((tab) => <button className={`flex shrink-0 items-center gap-3 border-r border-[#3a4540] px-4 font-mono text-xs ${tab.path === activeFile?.path ? 'bg-[#1e1e1e] text-[#e6eee7]' : 'text-[#8f9c93]'}`} key={tab.path} onClick={() => onSelectTab(tab.path)}>{tab.name}<span className="text-[#8f9c93] hover:text-[#e59b62]" onClick={(event) => { event.stopPropagation(); onCloseTab(tab.path) }}>x</span></button>)}</div><Editor height="calc(100vh - 122px)" language={languageFor(activeFile?.name)} theme="vs-dark" value={code} onChange={(value) => setCode(value || '')} options={{ minimap: { enabled: true }, fontSize: 14, padding: { top: 18 } }} /></section>
 }
 
 function languageFor(name = '') { if (name.endsWith('.json')) return 'json'; if (name.endsWith('.ts')) return 'typescript'; if (name.endsWith('.css')) return 'css'; if (name.endsWith('.md')) return 'markdown'; return 'javascript' }
