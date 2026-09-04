@@ -7,6 +7,9 @@ export type ExtensionInfo = {
   path?: string
   namespace?: string
   displayName?: string
+  iconThemes?: Array<{ id: string; label: string; path?: string }>
+  enabled?: boolean
+  location?: string
 }
 
 export type MarketplaceExtension = {
@@ -17,16 +20,26 @@ export type MarketplaceExtension = {
   description?: string
   files?: {
     download?: string
+    icon?: string
   }
+  statistics?: Array<{ statisticName: string; value: number }>
+  downloadCount?: number
 }
 
 export type ElectronAPI = {
   platform: NodeJS.Platform | string
   workspace: {
-    list: (path: string) => Promise<Array<{ name: string; path: string; isDirectory: boolean; parent?: string }>>
+    list: (path: string) => Promise<Array<{ name: string; path: string; isDirectory: boolean; parent?: string; icon?: string }>>
     read: (path: string) => Promise<string>
-    openFolder: () => Promise<{ canceled: boolean; name?: string; path?: string; entries?: Array<{ name: string; path: string; isDirectory: boolean }> }>
+    write: (path: string, content: string) => Promise<{ saved: boolean }>
+    openFolder: () => Promise<{ canceled: boolean; name?: string; path?: string; iconTheme?: string; entries?: Array<{ name: string; path: string; isDirectory: boolean; parent?: string; icon?: string }> }>
+    restore: () => Promise<{ restored: boolean; name?: string; path?: string; iconTheme?: string; entries?: Array<{ name: string; path: string; isDirectory: boolean; parent?: string; icon?: string }> }>
+    setIconTheme: (themeId: string) => Promise<Array<{ name: string; path: string; isDirectory: boolean; parent?: string; icon?: string }>>
     openFile: () => Promise<{ canceled: boolean; name?: string; path?: string; content?: string }>
+    create: (directory: string, name: string, isDirectory: boolean) => Promise<Array<{ name: string; path: string; isDirectory: boolean; parent?: string; icon?: string }>>
+    delete: (path: string) => Promise<Array<{ name: string; path: string; isDirectory: boolean; parent?: string; icon?: string }>>
+    copyPath: (path: string) => Promise<void>
+    paste: (directory: string) => Promise<Array<{ name: string; path: string; isDirectory: boolean; parent?: string; icon?: string }>>
   }
   terminal: {
     run: (command: string) => Promise<{ output: string; code: number }>
